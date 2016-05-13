@@ -10,7 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/rhalff/x-ray-http-cache.git"
   },
-  "keywords": [],
+  "keywords": [
+    "cache",
+    "crawler",
+    "driver",
+    "redis",
+    "request",
+    "scrape",
+    "scraper",
+    "x-ray"
+  ],
   "author": "Rob halff",
   "license": "MIT",
   "bugs": {
