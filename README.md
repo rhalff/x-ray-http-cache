@@ -24,26 +24,21 @@ var redisCache = new redisModule({
   redisUrl: 'http://localhost:6379'
 });
 
-var options = {
-   driver: httpCache({
-      driver: redisCache,
-      cacheWhenEmpty: false,
-      expiration: 86400 // 24 hours
-   })
-}
-
 var Xray = require('x-ray');
 
 var x = Xray()
   .driver(httpCache({
-     driver: redisCache
+    driver: redisCache,
+    cacheWhenEmpty: false,
+    expiration: 86400 // 24 hours
   }));
 
 x('http://google.com', 'title')(function(err, str) {
-  if (err) return done(err);
-  assert.equal('Google', str);
-  done();
-})
+  console.log('Google', str);
+
+  // close connection to redis when finished
+  redisCache.db.quit();
+});
 ```
 
 ## Throttle
