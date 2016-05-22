@@ -1,5 +1,10 @@
 # x-ray-http-cache
 
+[![TravisCI Build Status](https://travis-ci.org/rhalff/x-ray-http-cache.svg?branch=master)](https://travis-ci.org/rhalff/x-ray-http-cache)
+[![NPM version](https://img.shields.io/npm/v/x-ray-http-cache.svg)](https://www.npmjs.org/package/x-ray-http-cache)
+[![Dependency Status](https://david-dm.org/rhalff/x-ray-http-cache.png?theme=shields.io)](https://david-dm.org/rhalff/x-ray-http-cache)
+[![Development Dependency Status](https://david-dm.org/rhalff/x-ray-http-cache/dev-status.png?theme=shields.io)](https://david-dm.org/rhalff/x-ray-http-cache#info=devDependencies)
+
   http-cache driver for [x-ray](https://github.com/lapwinglabs/x-ray).
 
   Uses [superagent-cache](https://github.com/jpodwys/superagent-cache) for caching.
