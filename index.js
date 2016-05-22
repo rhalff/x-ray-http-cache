@@ -1,6 +1,6 @@
 var superagentCache = require('superagent-cache')
 
-module.exports = driver
+module.exports = xRayHttpCacheDriver
 
 /**
  * Caching HTTP driver
@@ -9,7 +9,7 @@ module.exports = driver
  * @return {Function}
  */
 
-function driver (options) {
+function xRayHttpCacheDriver (options) {
   var opts = options || {}
   var args = []
   var superagent
