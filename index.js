@@ -1,4 +1,3 @@
-var superagent = require('superagent')
 var superagentCache = require('superagent-cache')
 
 module.exports = driver
@@ -12,17 +11,30 @@ module.exports = driver
 
 function driver (options) {
   var opts = options || {}
+  var args = []
+  var superagent
 
   if (opts) {
-    if (opts.driver) {
-      superagentCache(superagent, opts.driver, opts)
-    } else {
-      superagentCache(superagent)
+    if (opts.superagent) {
+      superagent = opts.superagent
     }
+
+    args.push(superagent || null)
+
+    if (opts.driver) {
+      args.push(opts.driver, opts)
+    }
+  }
+
+  var newAgent = superagentCache.apply(superagentCache, args)
+
+  if (newAgent) {
+    superagent = newAgent
   }
 
   var agent = superagent.agent(opts || {})
 
+  /* eslint-disable camelcase */
   return function http_cache_driver (ctx, fn) {
     agent
       .get(ctx.url)
