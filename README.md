@@ -29,8 +29,12 @@ var Xray = require('x-ray');
 var x = Xray()
   .driver(httpCache({
     driver: redisCache,
+
     cacheWhenEmpty: false,
-    expiration: 86400 // 24 hours
+    expiration: 86400, // 24 hours
+
+    // Optional: provide own superagent instance
+    // superagent: require('superagent')
   }));
 
 x('http://google.com', 'title')(function(err, str) {
