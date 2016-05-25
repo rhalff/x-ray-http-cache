@@ -1,11 +1,12 @@
 var superagentCache = require('superagent-cache')
+var superagentProxy = require('superagent-proxy')
 
 module.exports = xRayHttpCacheDriver
 
 /**
  * Caching HTTP driver
  *
- * @param {Object} opts
+ * @param {Object} options
  * @return {Function}
  */
 
@@ -32,31 +33,45 @@ function xRayHttpCacheDriver (options) {
     superagent = newAgent
   }
 
+  if (opts.proxy) {
+    superagentProxy(superagent)
+  }
+
   var agent = superagent.agent(opts || {})
 
   /* eslint-disable camelcase */
   return function http_cache_driver (ctx, fn) {
-    agent
-      .get(ctx.url)
-      .set(ctx.headers)
-      .end(function (err, res) {
-        if (err && !err.status) return fn(err)
+    if (opts.proxy) {
+      agent
+        .get(ctx.url)
+        .proxy(opts.proxy)
+        .set(ctx.headers)
+        .end(onresponse)
+    } else {
+      agent
+        .get(ctx.url)
+        .set(ctx.headers)
+        .end(onresponse)
+    }
 
-        ctx.status = res.status
-        ctx.set(res.headers)
+    function onresponse (err, res) {
+      if (err && !err.status) return fn(err)
 
-        ctx.body = ctx.type === 'application/json'
-          ? res.body
-          : res.text
+      ctx.status = res.status
+      ctx.set(res.headers)
 
-        // update the URL if there were redirects
-        if (res.redirects) {
-          ctx.url = res.redirects.length
-            ? res.redirects.pop()
-            : ctx.url
-        }
+      ctx.body = ctx.type === 'application/json'
+        ? res.body
+        : res.text
 
-        return fn(null, ctx)
-      })
+      // update the URL if there were redirects
+      if (res.redirects) {
+        ctx.url = res.redirects.length
+          ? res.redirects.pop()
+          : ctx.url
+      }
+
+      return fn(null, ctx)
+    }
   }
 }
